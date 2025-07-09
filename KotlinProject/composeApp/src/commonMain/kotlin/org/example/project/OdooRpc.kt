@@ -29,6 +29,7 @@ data class JsonRpcResponse<T>(
 )
 
 class OdooRpc(private val client: HttpClient) {
+    class OdooRpcException(val error: JsonObject) : Exception("Odoo RPC Error: ${error}")
     suspend fun <T> call(
         url: String,
         service: String,
@@ -46,6 +47,10 @@ class OdooRpc(private val client: HttpClient) {
             contentType(ContentType.Application.Json)
             setBody(request)
         }.body<JsonRpcResponse<T>>()
+
+        if (response.error != null) {
+            throw OdooRpcException(response.error)
+        }
 
         return response
     }

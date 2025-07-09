@@ -115,7 +115,7 @@ fun App() {
                     if (isLoading) {
                         CircularProgressIndicator(color = Color.White)
                     } else {
-                        Text("Check configuration")
+                        Text("Provjeri")
                     }
                 }
             }
