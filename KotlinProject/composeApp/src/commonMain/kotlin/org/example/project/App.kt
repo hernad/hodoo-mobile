@@ -34,6 +34,9 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.buildJsonArray
+import kotlinx.serialization.json.JsonPrimitive
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 
@@ -41,7 +44,7 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 @Preview
 fun App() {
     MaterialTheme {
-        var odooUrl by remember { mutableStateOf("http://localhost:8069") }
+        var odooUrl by remember { mutableStateOf("http://192.168.168.148:8069") }
         var odooDb by remember { mutableStateOf("odoo-test-1") }
         var odooUser by remember { mutableStateOf("admin") }
         var odooApiKey by remember { mutableStateOf("admin") }
@@ -98,12 +101,14 @@ fun App() {
                         coroutineScope.launch {
                             isLoading = true
                             val url = "$odooUrl/jsonrpc"
-                            val params = buildJsonObject {
-                                put("login", odooUser)
-                                put("password", odooApiKey)
+                            val args = buildJsonArray {
+                                add(JsonPrimitive(odooDb))
+                                add(JsonPrimitive(odooUser))
+                                add(JsonPrimitive(odooApiKey))
                             }
                             try {
-                                val result = odooRpc.callCommon<Int>(url, "login", odooDb, params)
+                                val result = odooRpc.call<Int>(url, "common", "login", args)
+                                println("Odoo RPC Login Result: $result")
                                 checkState = result.result != null
                             } catch (e: OdooRpc.OdooRpcException) {
                                 println("Odoo RPC Exception: ${e.error}")

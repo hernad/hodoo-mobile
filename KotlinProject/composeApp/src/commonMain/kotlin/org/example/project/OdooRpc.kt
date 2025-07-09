@@ -38,42 +38,13 @@ class OdooRpc(private val client: HttpClient) {
         url: String,
         service: String,
         method: String,
-        args: JsonObject
+        args: JsonArray
     ): JsonRpcResponse<T> {
         val request = JsonRpcRequest(
             params = buildJsonObject {
                 put("service", service)
                 put("method", method)
                 put("args", args)
-            }
-        )
-        val response = client.post(url) {
-            contentType(ContentType.Application.Json)
-            setBody(request)
-        }.body<JsonRpcResponse<T>>()
-
-        if (response.error != null) {
-            throw OdooRpcException(response.error)
-        }
-
-        return response
-    }
-
-    suspend fun <T> callCommon(
-        url: String,
-        method: String,
-        db: String,
-        loginArgs: JsonObject
-    ): JsonRpcResponse<T> {
-        val request = JsonRpcRequest(
-            params = buildJsonObject {
-                put("service", "common")
-                put("method", method)
-                put("args", buildJsonArray {
-                    add(JsonPrimitive(db))
-                    add(JsonPrimitive(loginArgs["login"]?.jsonPrimitive?.content))
-                    add(JsonPrimitive(loginArgs["password"]?.jsonPrimitive?.content))
-                })
             }
         )
         val response = client.post(url) {
