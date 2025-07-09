@@ -14,6 +14,9 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
 import kotlinx.serialization.json.jsonPrimitive
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.buildJsonArray
+import kotlinx.serialization.json.JsonPrimitive
 
 @Serializable
 data class JsonRpcRequest(
@@ -60,13 +63,17 @@ class OdooRpc(private val client: HttpClient) {
         url: String,
         method: String,
         db: String,
-        args: JsonObject
+        loginArgs: JsonObject
     ): JsonRpcResponse<T> {
         val request = JsonRpcRequest(
             params = buildJsonObject {
-                put("db", db)
-                put("login", args["login"]?.jsonPrimitive?.content)
-                put("password", args["password"]?.jsonPrimitive?.content)
+                put("service", "common")
+                put("method", method)
+                put("args", buildJsonArray {
+                    add(JsonPrimitive(db))
+                    add(JsonPrimitive(loginArgs["login"]?.jsonPrimitive?.content))
+                    add(JsonPrimitive(loginArgs["password"]?.jsonPrimitive?.content))
+                })
             }
         )
         val response = client.post(url) {
