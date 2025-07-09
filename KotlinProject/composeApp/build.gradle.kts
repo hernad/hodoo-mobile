@@ -74,6 +74,7 @@ kotlin {
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.multiplatform.settings)
             implementation(libs.multiplatform.settings.coroutines)
+            implementation("network.chaintech:qr-kit:3.1.1")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

@@ -43,6 +43,7 @@ import com.russhwolf.settings.set
 import com.russhwolf.settings.get
 import org.example.project.createSettings
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import network.chaintech.sdk.qrkit.QRScanner
 
 
 @Composable
@@ -56,6 +57,7 @@ fun App(context: Any? = null) {
         var odooApiKey by remember { mutableStateOf(settings.getString("odooApiKey", "admin")) }
         var checkState by remember { mutableStateOf<Boolean?>(null) }
         var isLoading by remember { mutableStateOf(false) }
+        var showQrScanner by remember { mutableStateOf(false) }
         val coroutineScope = rememberCoroutineScope()
         val odooRpc = remember { createOdooRpcClient() }
 
@@ -97,7 +99,7 @@ fun App(context: Any? = null) {
             Spacer(modifier = Modifier.height(16.dp))
             Row {
                 Button(onClick = {
-                    // TODO: Implement QR code scanner
+                    showQrScanner = true
                 }) {
                     Text("Scan QR")
                 }
@@ -144,6 +146,20 @@ fun App(context: Any? = null) {
                         Text("Check configuration")
                     }
                 }
+            }
+            if (showQrScanner) {
+                QRScanner(onCompletion = { result ->
+                    result.onSuccess { scannedValue ->
+                        odooApiKey = scannedValue
+                        showQrScanner = false
+                    }.onFailure { error ->
+                        println("QR Scan Error: ${error.message}")
+                        showQrScanner = false
+                    }
+                }, onPermissionsDenied = {
+                    println("Camera permissions denied")
+                    showQrScanner = false
+                })
             }
             Spacer(modifier = Modifier.height(16.dp))
             var internetCheckState by remember { mutableStateOf<Boolean?>(null) }
