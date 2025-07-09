@@ -37,6 +37,7 @@ import kotlinx.serialization.json.put
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.buildJsonArray
 import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.intOrNull
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 
@@ -107,9 +108,10 @@ fun App() {
                                 add(JsonPrimitive(odooApiKey))
                             }
                             try {
-                                val result = odooRpc.call<Int>(url, "common", "login", args)
-                                println("Odoo RPC Login Result: $result")
-                                checkState = result.result != null
+                                val result = odooRpc.call<kotlinx.serialization.json.JsonElement>(url, "common", "login", args)
+                                println("Odoo RPC Login Raw Result: $result")
+                                println("Odoo RPC Login Result.result: ${result.result}")
+                                checkState = (result.result as? JsonPrimitive)?.intOrNull?.let { it >= 1 && it <= 999 } ?: false
                             } catch (e: OdooRpc.OdooRpcException) {
                                 println("Odoo RPC Exception: ${e.error}")
                                 checkState = false
@@ -121,6 +123,7 @@ fun App() {
                             }
                         }
                     },
+                    enabled = !isLoading,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = when (checkState) {
                             true -> Color.Green
@@ -132,7 +135,7 @@ fun App() {
                     if (isLoading) {
                         CircularProgressIndicator(color = Color.White)
                     } else {
-                        Text("Provjeri")
+                        Text("Check configuration")
                     }
                 }
             }
@@ -178,13 +181,7 @@ fun App() {
                     modifier = Modifier.padding(top = 16.dp)
                 )
             }
-            if (checkState == false) {
-                Text(
-                    text = "Error connecting to Odoo. Please check your settings.",
-                    color = Color.Red,
-                    modifier = Modifier.padding(top = 16.dp)
-                )
-            }
+            
         }
     }
 }
