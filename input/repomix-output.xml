@@ -1,0 +1,158 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+JSONRPC.md
+python_example_common.py
+python_example.py
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="JSONRPC.md">
+# JSON-RPC
+
+## api-key
+
+To authenticate JSON-RPC requests in Odoo using an API key instead of a password, you need to generate an API key for a user and then include it in the authentication header of your requests. Odoo allows you to use API keys in place of passwords for JSON-RPC communication. 
+Here's how to do it:
+
+1. Generate an API Key:
+
+Navigate to your user profile preferences in Odoo (usually found under the user icon, then "Preferences").
+Locate the "Security" or "API Keys" section.
+Click "New API Key" and confirm with your password.
+The newly generated API key will be displayed. 
+
+2. Use the API Key in your JSON-RPC Request:
+
+Instead of including the password in the params of your JSON-RPC request, you will include the API key. 
+The auth parameter should be set to api_key when defining your controller route, according to the Odoo Community Association. 
+You may need to configure your Odoo server to allow API key authentication, potentially by setting api_key to True in the configuration file. 
+An example of a JSON-RPC request using an API key might look like this: 
+Code
+
+```
+{
+    "jsonrpc": "2.0",
+    "method": "call",
+    "params": {
+        "service": "object",
+        "method": "execute_kw",
+        "args": [
+            "your_database_name",
+            your_user_id,
+            "your_api_key",  // API key instead of password
+            "your_model",
+            "your_method",
+            [your_arguments]
+        ]
+    },
+    "id": 1
+}
+```
+
+Important Considerations:
+
+Security:
+API keys should be treated like passwords. Store them securely and avoid sharing them unnecessarily. 
+
+User ID:
+You'll still need the user's ID or email along with the API key for authentication, according to the Odoo forum. 
+
+Module:
+Some modules or configurations may be required to enable API key authentication, such as the Odoo Community Association's Auth Api Key module. 
+
+Documentation:
+Refer to the official Odoo documentation for specific instructions and configuration details related to your Odoo version.
+</file>
+
+<file path="python_example_common.py">
+import json
+import json
+import random
+import urllib.request
+
+
+AUTH = {
+  "host": 'localhost'
+  "port": 8069
+  "database": 'odoo-test-1'
+  "user" = 'admin'
+  "password" = '3f5b7a4ccf952a8c23391f975bf3d50bf18f01c0'
+}
+
+def json_rpc(url, method, params):
+   data = {
+      "jsonrpc": "2.0",
+      "method": method,
+      "params": params,
+      "id": random.randint(0, 1000000000),
+   }
+   req = urllib.request.Request(url=url, data=json.dumps(data).encode(), headers={
+      "Content-Type":"application/json",
+   })
+   reply = json.loads(urllib.request.urlopen(req).read().decode('UTF-8'))
+   if reply.get("error"):
+       raise Exception(reply["error"])
+   return reply["result"]
+
+
+def call(url, service, method, *args):
+   return json_rpc(url, "call", {"service": service, "method": method, "args": args})
+</file>
+
+<file path="python_example.py">
+import json
+import json
+import random
+import urllib.request
+from .python_example_common import AUTH, call
+
+url = "http://%s:%s/jsonrpc" % (AUTH["host"], AUTH["port"])
+uid = call(url, "common", "login", AUTH["database"], AUTH["user"], AUTH["password"])
+
+
+print("$uid={uid}")
+</file>
+
+</files>
