@@ -25,6 +25,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.request.get
+import io.ktor.http.HttpStatusCode
 import kotlinx.coroutines.launch
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
@@ -127,6 +131,48 @@ fun App() {
                         Text("Provjeri")
                     }
                 }
+            }
+            Spacer(modifier = Modifier.height(16.dp))
+            var internetCheckState by remember { mutableStateOf<Boolean?>(null) }
+            var internetLoading by remember { mutableStateOf(false) }
+            Button(
+                onClick = {
+                    coroutineScope.launch {
+                        internetLoading = true
+                        try {
+                            val httpClient = HttpClient() // Create a new HttpClient for internet check
+                            val response = httpClient.get("https://www.google.com")
+                            internetCheckState = response.status.value == 200
+                            httpClient.close()
+                        } catch (e: Exception) {
+                            println("Internet check exception: ${e.message}")
+                            internetCheckState = false
+                        } finally {
+                            internetLoading = false
+                        }
+                    }
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = when (internetCheckState) {
+                        true -> Color.Green
+                        false -> Color.Red
+                        else -> MaterialTheme.colorScheme.primary
+                    }
+                ),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                if (internetLoading) {
+                    CircularProgressIndicator(color = Color.White)
+                } else {
+                    Text("Check Internet")
+                }
+            }
+            if (internetCheckState == false) {
+                Text(
+                    text = "No internet connection. Please check your network.",
+                    color = Color.Red,
+                    modifier = Modifier.padding(top = 16.dp)
+                )
             }
             if (checkState == false) {
                 Text(
