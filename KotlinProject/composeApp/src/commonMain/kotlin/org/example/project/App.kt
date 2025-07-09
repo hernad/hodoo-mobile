@@ -99,9 +99,18 @@ fun App() {
                                 put("login", odooUser)
                                 put("password", odooApiKey)
                             }
-                            val result = odooRpc.call<Int>(url, "common", "login", params)
-                            checkState = result.result != null
-                            isLoading = false
+                            try {
+                                val result = odooRpc.call<Int>(url, "common", "login", params)
+                                checkState = result.result != null
+                            } catch (e: OdooRpc.OdooRpcException) {
+                                println("Odoo RPC Exception: ${e.error}")
+                                checkState = false
+                            } catch (e: Exception) {
+                                println("General Exception: ${e.message}")
+                                checkState = false
+                            } finally {
+                                isLoading = false
+                            }
                         }
                     },
                     colors = ButtonDefaults.buttonColors(
