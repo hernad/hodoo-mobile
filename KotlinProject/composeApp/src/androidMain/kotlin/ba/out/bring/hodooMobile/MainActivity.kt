@@ -1,4 +1,4 @@
-package org.example.project
+package ba.out.bring.hodooMobile
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

@@ -1,4 +1,4 @@
-package org.example.project
+package ba.out.bring.hodooMobile
 
 interface Platform {
     val name: String

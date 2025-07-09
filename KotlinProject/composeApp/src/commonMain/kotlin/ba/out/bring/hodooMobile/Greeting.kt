@@ -1,4 +1,4 @@
-package org.example.project
+package ba.out.bring.hodooMobile
 
 class Greeting {
     private val platform = getPlatform()

@@ -74,7 +74,6 @@ kotlin {
             implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.multiplatform.settings)
             implementation(libs.multiplatform.settings.coroutines)
-            implementation("network.chaintech:qr-kit:3.1.1")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -92,11 +91,11 @@ kotlin {
 }
 
 android {
-    namespace = "org.example.project"
+    namespace = "ba.out.bring.hodooMobile"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "org.example.project"
+        applicationId = "ba.out.bring.hodooMobile"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
@@ -124,11 +123,11 @@ dependencies {
 
 compose.desktop {
     application {
-        mainClass = "org.example.project.MainKt"
+        mainClass = "ba.out.bring.hodooMobile.MainKt"
 
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "org.example.project"
+            packageName = "ba.out.bring.hodooMobile"
             packageVersion = "1.0.0"
         }
     }

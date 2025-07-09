@@ -1,4 +1,4 @@
-package org.example.project
+package ba.out.bring.hodooMobile
 
 import android.content.Context
 import com.russhwolf.settings.Settings

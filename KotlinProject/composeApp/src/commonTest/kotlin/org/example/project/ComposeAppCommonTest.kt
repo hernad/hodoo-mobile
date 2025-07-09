@@ -1,4 +1,4 @@
-package org.example.project
+package ba.out.bring.hodooMobile
 
 import kotlin.test.Test
 import kotlin.test.assertEquals

@@ -1,4 +1,4 @@
-rootProject.name = "HodoMobile"
+rootProject.name = "HodooMobile"
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
