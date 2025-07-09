@@ -20,9 +20,17 @@ Kotlin multiplatform project (KMP) is alredy initalized in KotlinProject/ direct
 
 [ ] Odoo api key parameter can be entered directly or via option QR-CODE which will read QR code 
 
-[ ] Create button "Check internet"
+[X] Create button "Check internet"
 
 - Test internet access
+
+[ ] "Save button" and load on start
+
+Save button will persist all parameters to local storage.
+When application start, all these parameters will initialized from storage.
+
+
+
 
 ## Notes
 

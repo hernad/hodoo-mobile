@@ -38,17 +38,22 @@ import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.buildJsonArray
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.intOrNull
+import com.russhwolf.settings.Settings
+import com.russhwolf.settings.set
+import com.russhwolf.settings.get
+import org.example.project.createSettings
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 
 @Composable
 @Preview
-fun App() {
+fun App(context: Any? = null) {
     MaterialTheme {
-        var odooUrl by remember { mutableStateOf("http://192.168.168.148:8069") }
-        var odooDb by remember { mutableStateOf("odoo-test-1") }
-        var odooUser by remember { mutableStateOf("admin") }
-        var odooApiKey by remember { mutableStateOf("admin") }
+        val settings = remember { createSettings(context) }
+        var odooUrl by remember { mutableStateOf(settings.getString("odooUrl", "http://192.168.168.148:8069")) }
+        var odooDb by remember { mutableStateOf(settings.getString("odooDb", "odoo-test-1")) }
+        var odooUser by remember { mutableStateOf(settings.getString("odooUser", "admin")) }
+        var odooApiKey by remember { mutableStateOf(settings.getString("odooApiKey", "admin")) }
         var checkState by remember { mutableStateOf<Boolean?>(null) }
         var isLoading by remember { mutableStateOf(false) }
         val coroutineScope = rememberCoroutineScope()
@@ -97,6 +102,7 @@ fun App() {
                     Text("Scan QR")
                 }
                 Spacer(modifier = Modifier.weight(1f))
+                
                 Button(
                     onClick = {
                         coroutineScope.launch {
@@ -181,7 +187,14 @@ fun App() {
                     modifier = Modifier.padding(top = 16.dp)
                 )
             }
-            
-        }
+            Spacer(modifier = Modifier.height(16.dp))
+            Button(onClick = {
+                settings["odooUrl"] = odooUrl
+                settings["odooDb"] = odooDb
+                settings["odooUser"] = odooUser
+                settings["odooApiKey"] = odooApiKey
+            }) {
+                Text("Save")
+            }
     }
 }

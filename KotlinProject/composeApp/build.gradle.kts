@@ -13,6 +13,11 @@ plugins {
     alias(libs.plugins.kotlinx.serialization)
 }
 
+repositories {
+    google()
+    mavenCentral()
+}
+
 kotlin {
     androidTarget {
         @OptIn(ExperimentalKotlinGradlePluginApi::class)
@@ -34,29 +39,10 @@ kotlin {
     
     jvm("desktop")
     
-    @OptIn(ExperimentalWasmDsl::class)
-    wasmJs {
-        outputModuleName.set("composeApp")
-        browser {
-            val rootDirPath = project.rootDir.path
-            val projectDirPath = project.projectDir.path
-            commonWebpackConfig {
-                outputFileName = "composeApp.js"
-                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
-                    static = (static ?: mutableListOf()).apply {
-                        // Serve sources to debug inside browser
-                        add(rootDirPath)
-                        add(projectDirPath)
-                    }
-                }
-            }
-        }
-        binaries.executable()
-    }
+    
     
     sourceSets {
         val desktopMain by getting
-        val wasmJsMain by getting
         val androidMain by getting
         val commonMain by getting
         val iosX64Main by getting
@@ -86,6 +72,8 @@ kotlin {
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)
             implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.multiplatform.settings)
+            implementation(libs.multiplatform.settings.coroutines)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -98,9 +86,7 @@ kotlin {
         iosMain.dependencies {
             implementation(libs.ktor.client.darwin)
         }
-        wasmJsMain.dependencies {
-            implementation(libs.ktor.client.js)
-        }
+        
     }
 }
 
