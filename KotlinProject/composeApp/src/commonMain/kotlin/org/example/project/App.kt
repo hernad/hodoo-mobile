@@ -99,12 +99,11 @@ fun App() {
                             isLoading = true
                             val url = "$odooUrl/jsonrpc"
                             val params = buildJsonObject {
-                                put("db", odooDb)
                                 put("login", odooUser)
                                 put("password", odooApiKey)
                             }
                             try {
-                                val result = odooRpc.call<Int>(url, "common", "login", params)
+                                val result = odooRpc.callCommon<Int>(url, "login", odooDb, params)
                                 checkState = result.result != null
                             } catch (e: OdooRpc.OdooRpcException) {
                                 println("Odoo RPC Exception: ${e.error}")
