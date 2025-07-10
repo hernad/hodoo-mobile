@@ -13,6 +13,7 @@ import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.buildJsonObject
 import kotlinx.serialization.json.put
+import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.buildJsonArray
@@ -57,6 +58,39 @@ class OdooRpc(val client: HttpClient) {
         }
 
         return response
+    }
+
+    suspend fun getServerVersion(
+        odooUrl: String,
+        odooDb: String,
+        odooUser: String,
+        odooApiKey: String
+    ): String? {
+        return try {
+            val url = "$odooUrl/web/session/authenticate"
+            val args = buildJsonObject {
+                put("db", odooDb)
+                put("login", odooUser)
+                put("password", odooApiKey)
+            }
+            val request = JsonRpcRequest(
+                method = "call",
+                params = buildJsonObject {
+                    put("service", "common")
+                    put("method", "login")
+                    put("args", buildJsonArray { add(args) })
+                }
+            )
+            val response = client.post(url) {
+                contentType(ContentType.Application.Json)
+                setBody(request)
+            }.body<JsonObject>()
+
+            response["result"]?.jsonObject?.get("server_version")?.jsonPrimitive?.content
+        } catch (e: Exception) {
+            println("Error getting Odoo server version: ${e.message}")
+            null
+        }
     }
 }
 

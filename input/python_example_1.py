@@ -16,6 +16,6 @@ url = "http://%s:%s/web/session/authenticate" % (AUTH["host"], AUTH["port"])
 rpc_result = call_web_session_authenticate(url, { "db": AUTH["database"], "login": AUTH["user"], "password": AUTH["password"]})
 
 print(f"result {rpc_result}")
-print(f"server version: {rpc_result['server_version']}")
+print(f"Odoo server version: {rpc_result['server_version']}")
 
 #dummy = input()
