@@ -26,7 +26,7 @@ import ba.out.bring.hodooMobile.createSettings
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
 enum class Screen {
-    MainMenu, Settings, Info
+    MainMenu, Settings, Info, CurrentBalance
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,7 +57,7 @@ fun App(context: Any? = null) {
                     navigationIcon = {
                         if (currentScreen != Screen.MainMenu) {
                             IconButton(onClick = { currentScreen = Screen.MainMenu }) {
-                                Icon(Icons.Filled.ArrowBack, "Back")
+                                Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back")
                             }
                         }
                     },
@@ -73,7 +73,8 @@ fun App(context: Any? = null) {
                 when (currentScreen) {
                     Screen.MainMenu -> MainMenuScreen(
                         onNavigateToSettings = { currentScreen = Screen.Settings },
-                        onNavigateToInfo = { currentScreen = Screen.Info }
+                        onNavigateToInfo = { currentScreen = Screen.Info },
+                        onNavigateToCurrentBalance = { currentScreen = Screen.CurrentBalance }
                     )
                     Screen.Settings -> SettingsScreen(
                         settings = settings,
@@ -86,6 +87,10 @@ fun App(context: Any? = null) {
                         odooDb = odooDb,
                         odooUser = odooUser,
                         odooApiKey = odooApiKey
+                    )
+                    Screen.CurrentBalance -> CurrentBalanceScreen(
+                        settings = settings,
+                        odooRpc = odooRpc
                     )
                 }
             }

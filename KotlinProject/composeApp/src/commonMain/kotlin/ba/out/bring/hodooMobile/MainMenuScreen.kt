@@ -11,7 +11,8 @@ import androidx.compose.ui.unit.dp
 @Composable
 fun MainMenuScreen(
     onNavigateToSettings: () -> Unit,
-    onNavigateToInfo: () -> Unit
+    onNavigateToInfo: () -> Unit,
+    onNavigateToCurrentBalance: () -> Unit
 ) {
     Column(
         modifier = Modifier.fillMaxSize().padding(16.dp),
@@ -30,6 +31,13 @@ fun MainMenuScreen(
             modifier = Modifier.fillMaxWidth().height(50.dp)
         ) {
             Text("Info")
+        }
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(
+            onClick = onNavigateToCurrentBalance,
+            modifier = Modifier.fillMaxWidth().height(50.dp)
+        ) {
+            Text("Current Balance")
         }
     }
 }

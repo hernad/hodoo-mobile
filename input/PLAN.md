@@ -11,6 +11,7 @@ Kotlin multiplatform project (KMP) is alredy initalized in KotlinProject/ direct
 Provide access to:
 - Settings screen
 - Info screen
+- Current balance screen
 
 [ ] Odoo server version
 Create function which will get Odoo server version. As reference use implementation in @input/python_example_1.py 
@@ -41,10 +42,22 @@ Create function which will get Odoo server version. As reference use implementat
 Save button will persist all parameters to local storage.
 When application start, all these parameters will initialized from storage.
 
-
 [X] Odoo API key hidden
 
 We need that API input is hidden ass password entry. Provide also that can be visible during entry. 
+
+[X] "Current balance" screen 
+
+Show cash and asset accounts in format
+
+| Account name | current balance |
+| -------------| --------------- |
+| cash         |            $0.0 |
+| bank 1       |          $100.0 |
+| credit card  |           $50.0 |
+
+Example python implementation @input/python_example_4.py
+
 
 ## TODO
 
