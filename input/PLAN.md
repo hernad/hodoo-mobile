@@ -42,6 +42,9 @@ Save button will persist all parameters to local storage.
 When application start, all these parameters will initialized from storage.
 
 
+[X] Odoo API key hidden
+
+We need that API input is hidden ass password entry. Provide also that can be visible during entry. 
 
 ## TODO
 
