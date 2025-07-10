@@ -76,6 +76,9 @@ kotlin {
             implementation(libs.multiplatform.settings)
             implementation(libs.multiplatform.settings.coroutines)
         }
+        androidMain.dependencies {
+            implementation(compose.uiTooling)
+        }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }

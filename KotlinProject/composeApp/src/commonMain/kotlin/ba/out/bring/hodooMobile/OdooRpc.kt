@@ -75,11 +75,7 @@ class OdooRpc(val client: HttpClient) {
             }
             val request = JsonRpcRequest(
                 method = "call",
-                params = buildJsonObject {
-                    put("service", "common")
-                    put("method", "login")
-                    put("args", buildJsonArray { add(args) })
-                }
+                params = args
             )
             val response = client.post(url) {
                 contentType(ContentType.Application.Json)
