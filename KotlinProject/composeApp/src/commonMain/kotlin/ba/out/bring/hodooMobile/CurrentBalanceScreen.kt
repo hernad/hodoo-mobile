@@ -49,29 +49,32 @@ fun CurrentBalanceScreen(
                 }
                 val authResult = odooRpc.call<JsonElement>(url, "common", "authenticate", authArgs)
 
-                val searchReadArgs = buildJsonArray {
-                    add(JsonPrimitive(odooDb))
-                    add(authResult.result?.jsonObject?.get("uid"))
-                    add(JsonPrimitive(odooApiKey))
-                    add(JsonPrimitive("account.account"))
-                    add(JsonPrimitive("search_read"))
-                    add(buildJsonArray {
+                val uid = authResult.result?.jsonObject?.get("uid")
+                if (uid != null) {
+                    val searchReadArgs = buildJsonArray {
+                        add(JsonPrimitive(odooDb))
+                        add(uid)
+                        add(JsonPrimitive(odooApiKey))
+                        add(JsonPrimitive("account.account"))
+                        add(JsonPrimitive("search_read"))
                         add(buildJsonArray {
-                            add(JsonPrimitive("account_type"))
-                            add(JsonPrimitive("="))
-                            add(JsonPrimitive("asset_cash"))
+                            add(buildJsonArray {
+                                add(JsonPrimitive("account_type"))
+                                add(JsonPrimitive("="))
+                                add(JsonPrimitive("asset_cash"))
+                            })
                         })
-                    })
+                    }
+                    val searchReadResult = odooRpc.call<JsonArray>(url, "object", "execute", searchReadArgs)
+
+                    val fetchedAccounts = searchReadResult.result?.map {
+                        val name = it.jsonObject["name"]?.jsonPrimitive?.content ?: ""
+                        val balance = it.jsonObject["current_balance"]?.jsonPrimitive?.content?.toDoubleOrNull() ?: 0.0
+                        name to balance
+                    } ?: emptyList()
+
+                    accounts = fetchedAccounts
                 }
-                val searchReadResult = odooRpc.call<JsonArray>(url, "object", "execute", searchReadArgs)
-
-                val fetchedAccounts = searchReadResult.result?.map {
-                    val name = it.jsonObject["name"]?.jsonPrimitive?.content ?: ""
-                    val balance = it.jsonObject["current_balance"]?.jsonPrimitive?.content?.toDoubleOrNull() ?: 0.0
-                    name to balance
-                } ?: emptyList()
-
-                accounts = fetchedAccounts
 
             } catch (e: Exception) {
                 // Handle error
