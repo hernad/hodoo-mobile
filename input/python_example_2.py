@@ -1,5 +1,6 @@
-from .python_example_common import AUTH, call
+from .python_common import AUTH, call
 
+print("=== example 2 =========")
 url = "http://%s:%s/jsonrpc" % (AUTH["host"], AUTH["port"])
 uid = call(url, "common", "login", AUTH["database"], AUTH["user"], AUTH["password"])
 

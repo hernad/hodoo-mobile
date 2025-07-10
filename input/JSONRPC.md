@@ -58,3 +58,7 @@ Refer to the official Odoo documentation for specific instructions and configura
 
 - https://www.cybrosys.com/odoo/odoo-books/odoo-16-development/rpc/json-rpc/
 - Json examples using odoo RPC https://github.com/amlaksil/Odoo-JSON-RPC-API/tree/master
+- nodejs https://github.com/fernandoslim/odoo-jsonrpc
+  - connect with session_id: https://github.com/fernandoslim/odoo-jsonrpc/blob/main/src/OdooJSONRpc.ts#L290
+  - authenticate with credential response: https://github.com/fernandoslim/odoo-jsonrpc/blob/main/src/OdooJSONRpc.ts#L12
+  - authenticate with apikey response: https://github.com/fernandoslim/odoo-jsonrpc/blob/main/src/OdooJSONRpc.ts#L9
