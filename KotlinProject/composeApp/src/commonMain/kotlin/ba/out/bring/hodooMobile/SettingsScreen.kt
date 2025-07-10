@@ -149,10 +149,10 @@ fun SettingsScreen(
                                     "login",
                                     args
                                 )
-                            println("Odoo RPC Login Raw Result: $result")
-                            println("Odoo RPC Login Result.result: ${result.result}")
+                            //println("Odoo RPC Login Raw Result: $result")
+                            //println("Odoo RPC Login Result.result: ${result.result}")
                             checkState =
-                                (result.result as? JsonPrimitive)?.intOrNull?.let { it >= 1 && it <= 999 }
+                                (result.result as? JsonPrimitive)?.intOrNull?.let { it >= 1 && it <= 9999 }
                                     ?: false
                         } catch (e: OdooRpc.OdooRpcException) {
                             println("Odoo RPC Exception: ${e.error}")

@@ -90,7 +90,8 @@ fun App(context: Any? = null) {
                     )
                     Screen.CurrentBalance -> CurrentBalanceScreen(
                         settings = settings,
-                        odooRpc = odooRpc
+                        odooRpc = odooRpc,
+                        snackbarHostState = snackbarHostState
                     )
                 }
             }
